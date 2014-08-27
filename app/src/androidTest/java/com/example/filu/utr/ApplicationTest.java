@@ -1,4 +1,4 @@
-package com.example.filu.myapplication;
+package com.example.filu.utr;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

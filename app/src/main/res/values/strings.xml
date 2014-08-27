@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">My Application</string>
-    <string name="title_activity_starting">Starting</string>
-    <string name="dummy_button">Start Level1</string>
-    <string name="dummy_content">Maze Master</string>
-    <string name="title_activity_start_game">StartGame</string>
-    <string name="hello_world">Level1</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">Ultimate Traveler Recorder</string>
+    <string name="title_activity_maps">UTR</string>
 
 </resources>
