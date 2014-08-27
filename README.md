@@ -1,4 +1,0 @@
-utr
-===
-
-Ultimate Traveller Recorder
