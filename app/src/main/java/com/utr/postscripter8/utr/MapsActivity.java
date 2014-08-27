@@ -1,7 +1,6 @@
 package com.utr.postscripter8.utr;
 
-
-
+import java.io.IOException;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -13,6 +12,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v4.app.DialogFragment;
+import android.hardware.Camera;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,7 +35,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements LocationListener,GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener {
+        GooglePlayServicesClient.OnConnectionFailedListener, CameraOverlayFragment.OnFragmentInteractionListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
@@ -150,6 +151,7 @@ public class MapsActivity extends FragmentActivity implements LocationListener,G
     @Override
     public void onProviderEnabled(String provider) {
         // TODO Auto-generated method stub
+        setUpMapIfNeeded();
     }
 
     @Override
@@ -166,6 +168,9 @@ public class MapsActivity extends FragmentActivity implements LocationListener,G
 
 
 
+    @Override
+    protected void onStop() {
+    }
 
     /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
@@ -302,4 +307,8 @@ public class MapsActivity extends FragmentActivity implements LocationListener,G
 
 
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 }
