@@ -19,6 +19,14 @@ android {
     }
 }
 
+android {
+    signingConfigs {
+        debug {
+            storeFile file("../gradle/debug.keystore")
+        }
+    }
+}
+
 dependencies {
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
