@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.res.Configuration;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -43,6 +44,7 @@ public class MapsActivity extends FragmentActivity implements LocationListener,G
     private GoogleMap map;
     private LocationClient mLocationClient;
 
+    private LatLng ll;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     // Define a DialogFragment that displays the error dialog
@@ -97,6 +99,9 @@ public class MapsActivity extends FragmentActivity implements LocationListener,G
             SupportMapFragment fm = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
             // Getting GoogleMap object from the fragment
             mMap = fm.getMap();
+            mMap.setTrafficEnabled(true);
+            mMap.getUiSettings().setAllGesturesEnabled(false);
+            mMap.getUiSettings().setZoomControlsEnabled(false);
             // Enabling MyLocation Layer of Google Map
             mMap.setMyLocationEnabled(true);
             // Getting LocationManager object from System Service LOCATION_SERVICE
@@ -104,40 +109,44 @@ public class MapsActivity extends FragmentActivity implements LocationListener,G
             // Creating a criteria object to retrieve provider
             Criteria criteria = new Criteria();
             // Getting the name of the best provider
+
             String provider = locationManager.getBestProvider(criteria, true);
             // Getting Current Location
             Location location = locationManager.getLastKnownLocation(provider);
 
-
             if(location!=null){
                 onLocationChanged(location);
+                this.ll = new LatLng(location.getLatitude(),location.getLongitude());
             }
-
             locationManager.requestLocationUpdates(provider, 20000, 0, this);
-
         }
+
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_maps);
+        setUpMapIfNeeded();
 
     }
 
     @Override
     public void onLocationChanged(Location location) {
 
-
         // Getting latitude of the current location
         double latitude = location.getLatitude();
-
         // Getting longitude of the current location
         double longitude = location.getLongitude();
-
         // Creating a LatLng object for the current location
         LatLng latLng = new LatLng(latitude, longitude);
-
         // Showing the current location in Google Map
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
         // Zoom in the Google Map
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-
         // Setting latitude and longitude in the TextView tv_location
         //tvLocation.setText("Latitude:" +  latitude  + ", Longitude:"+ longitude );
 
@@ -151,7 +160,7 @@ public class MapsActivity extends FragmentActivity implements LocationListener,G
     @Override
     public void onProviderEnabled(String provider) {
         // TODO Auto-generated method stub
-        setUpMapIfNeeded();
+//        setUpMapIfNeeded();
     }
 
     @Override
@@ -163,13 +172,44 @@ public class MapsActivity extends FragmentActivity implements LocationListener,G
     @Override
     protected void onResume() {
         super.onResume();
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        // Creating a criteria object to retrieve provider
+        Criteria criteria = new Criteria();
+        // Getting the name of the best provider
+        String provider = locationManager.getBestProvider(criteria, true);
+        // Getting Current Location
+        Location location = locationManager.getLastKnownLocation(provider);
+        if(location!=null){
+            onLocationChanged(location);
+        }
+        locationManager.requestLocationUpdates(provider, 20000, 0, this);
+        if(ll != null) {
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(ll));
+        }
         setUpMapIfNeeded();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outstate) {
+        outstate.putDouble("latitude",mMap.getMyLocation().getLatitude());
+        outstate.putDouble("longtitude",mMap.getMyLocation().getLongitude());
+        super.onSaveInstanceState(outstate);
 
+    }
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState);
+
+        this.ll = new LatLng(savedInstanceState.getDouble("latitude", 0),savedInstanceState.getDouble("longitude",0));
+        // Restore state members from saved instance
+
+    }
 
     @Override
     protected void onStop() {
+
+        super.onStop();
     }
 
     /**
@@ -216,6 +256,7 @@ public class MapsActivity extends FragmentActivity implements LocationListener,G
                 switch (resultCode) {
                     case Activity.RESULT_OK:
                         mLocationClient.connect();
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(ll));
                         break;
                 }
 
