@@ -8,7 +8,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="record"
+        android:text="Zacznij"
         android:id="@+id/button"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -41,4 +41,18 @@
         android:id="@+id/switch3"
         android:layout_below="@+id/switch1"
         android:layout_alignParentLeft="true" />
+    <!--VideoView
+        android:layout_width="160dp"
+        android:layout_height="90dp"
+        android:layout_below="@+id/switch3"
+        android:layout_alignParentLeft="true" /-->
+    <FrameLayout
+        android:id="@+id/camera_preview"
+        android:layout_width="160dp"
+        android:layout_height="90dp"
+        android:layout_weight="1"
+        android:layout_below="@+id/switch3"
+        android:layout_alignParentLeft="true"
+        />
+
 </RelativeLayout>

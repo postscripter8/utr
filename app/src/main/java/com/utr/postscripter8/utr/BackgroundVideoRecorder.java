@@ -103,7 +103,6 @@ public class BackgroundVideoRecorder extends Service implements SurfaceHolder.Ca
         mediaRecorder.stop();
         mediaRecorder.reset();
         mediaRecorder.release();
-
         camera.lock();
         camera.release();
 
